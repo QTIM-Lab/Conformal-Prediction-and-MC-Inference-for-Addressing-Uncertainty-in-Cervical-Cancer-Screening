@@ -1,6 +1,6 @@
 This repo serves as the reproducibility for the project Conformal Prediction and Monte Carlo Inference for Addressing Uncertainty in Cervical Cancer Screening for the MICCAI 2024 UNSURE Workshop.
 
-To run this project from scratch, please run `MICCAI_UNSURE_Workshop_Anon_Git/bash_scripts/run_several_analyses.sh` with the following changes and correct the paths in `PYTHON_SCRIPT_PATH`, `PREDICTIONS_CSV_PATHS`, `GT_CSV_PATH`. Choose where to send the analysis in `local base_dir`.
+To run this project from scratch, please run `Conformal-Prediction-and-MC-Inference-for-Addressing-Uncertainty-in-Cervical-Cancer-Screening/bash_scripts/run_several_analyses.sh` with the following changes and correct the paths in `PYTHON_SCRIPT_PATH`, `PREDICTIONS_CSV_PATHS`, `GT_CSV_PATH`. Choose where to send the analysis in `local base_dir`.
 
 To run the three-class version, please use:
 
