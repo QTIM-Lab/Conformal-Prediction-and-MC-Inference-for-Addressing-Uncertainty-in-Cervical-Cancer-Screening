@@ -3,24 +3,24 @@
 set -e  # Exit immediately if a command exits with a non-zero status.
 
 # Path to the Python script
-PYTHON_SCRIPT_PATH="/sddata/projects/Conformal_Uncertainty_Quantification/MICCAI_UNSURE_Workshop_Anon_Git/src/full_avg_mc_pred_sets_pipeliney.py"
+PYTHON_SCRIPT_PATH="/sddata/projects/MICCAI_2024_UNSURE_Conformal-Prediction-and-MC-Inference-for-Addressing-Uncertainty-in-Cervical-Cancer-Screening_copy/src/full_avg_mc_pred_sets_pipeline.py"
 
 # CSV files array (add your csv paths here)
 PREDICTIONS_CSV_PATHS=(
-    "/sddata/projects/Conformal_Uncertainty_Quantification/MICCAI_UNSURE_Workshop_Anon_Git/csvs/binary_predictions_with_ground_truths.csv"
+    "/sddata/projects/MICCAI_2024_UNSURE_Conformal-Prediction-and-MC-Inference-for-Addressing-Uncertainty-in-Cervical-Cancer-Screening_copy/csvs/three_class_predictions.csv"
 )
 
 # Ground truth CSV path
-GT_CSV_PATH="/sddata/projects/Conformal_Uncertainty_Quantification/MICCAI_UNSURE_Workshop_Anon_Git/csvs/binary_predictions_with_ground_truths.csv"
+GT_CSV_PATH="/sddata/projects/MICCAI_2024_UNSURE_Conformal-Prediction-and-MC-Inference-for-Addressing-Uncertainty-in-Cervical-Cancer-Screening_copy/csvs/three_class_ground_truths.csv"
 
 # Dataset filter
-DATASET_FILTER="test"
+DATASET_FILTER="test2"
 
 # Parameters arrays
 CUQ_TYPES=("lac" "aps")
 ALPHAS=("0.05" "0.1" "0.2")
 NUM_MC_COLS="50"
-NUM_CLASSES="2"
+NUM_CLASSES="3"
 LABEL_COL_NAME="CC_ST"
 
 # Function to create a save path based on input parameters
@@ -28,7 +28,7 @@ generate_save_path() {
     local cuq_type=$1
     local alpha=$2
     local num_classes=$3
-    local base_dir="/sddata/projects/Conformal_Uncertainty_Quantification/MICCAI_UNSURE_Workshop_Anon_Git/analysis"
+    local base_dir="/sddata/projects/MICCAI_2024_UNSURE_Conformal-Prediction-and-MC-Inference-for-Addressing-Uncertainty-in-Cervical-Cancer-Screening_copy/analysis"
     local alpha_str=$(printf "%.2f" "$alpha" | sed 's/\.//')
 
     echo "$base_dir/$num_classes/$cuq_type/alpha_$alpha_str"

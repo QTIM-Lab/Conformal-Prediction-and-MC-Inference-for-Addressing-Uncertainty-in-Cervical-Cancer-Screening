@@ -111,12 +111,12 @@ def compare_conformal_prediction_lengths(cuq_df_2c, cuq_df_3c, mc_or_eval, save_
 
 if __name__ == '__main__':
 
-    cuq_df_3c_path = '/sddata/projects/Conformal_Uncertainty_Quantification/MICCAI_UNSURE_Workshop_Anon_Git/analysis/3/lac/alpha_010/mc_lac_run_alpha0.1.csv'
+    cuq_df_3c_path = '/sddata/projects/MICCAI_2024_UNSURE_Conformal-Prediction-and-MC-Inference-for-Addressing-Uncertainty-in-Cervical-Cancer-Screening_copy/analysis/3/aps/alpha_010/mc_aps_run_alpha0.1.csv'
     cuq_df_3c = pd.read_csv(cuq_df_3c_path)
     
-    cuq_df_2c_path = '/sddata/projects/Conformal_Uncertainty_Quantification/MICCAI_UNSURE_Workshop_Anon_Git/analysis/2/lac/alpha_010/mc_lac_run_alpha0.1.csv'
+    cuq_df_2c_path = '/sddata/projects/MICCAI_2024_UNSURE_Conformal-Prediction-and-MC-Inference-for-Addressing-Uncertainty-in-Cervical-Cancer-Screening_copy/analysis/2/aps/alpha_010/mc_aps_run_alpha0.1.csv'
     cuq_df_2c = pd.read_csv(cuq_df_2c_path)
 
-    save_path = '/sddata/projects/Conformal_Uncertainty_Quantification/MICCAI_UNSURE_Workshop_Anon_Git/analysis'
+    save_path = '/sddata/projects/MICCAI_2024_UNSURE_Conformal-Prediction-and-MC-Inference-for-Addressing-Uncertainty-in-Cervical-Cancer-Screening_copy/analysis'
 
-    compare_conformal_prediction_lengths(cuq_df_2c, cuq_df_3c, 'mc', save_path, 'conformal_comparison_lac.csv')
+    compare_conformal_prediction_lengths(cuq_df_2c, cuq_df_3c, 'mc', save_path, 'conformal_comparison_aps.csv')

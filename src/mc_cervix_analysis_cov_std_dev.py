@@ -7,7 +7,10 @@ import numpy as np
 import os
 import matplotlib.pyplot as plt
 import seaborn as sns
+
+## Stats Testing
 from scipy import stats
+from scipy.stats import spearmanr
 
 ###########
 # Functions
@@ -109,29 +112,25 @@ def create_plot_cov_vs_pred_set_size(df, mc_or_eval, title, save_dir):
     Returns:
     - None: The function saves the resulting plot as a PNG file.
     """
-    if mc_or_eval == 'eval':
-        pred_length_col = 'pred_set_eval_length'
-    else:
-        pred_length_col = 'pred_set_mc_length'
+    pred_length_col = 'pred_set_eval_length' if mc_or_eval == 'eval' else 'pred_set_mc_length'
 
     # Create the box plot
-    boxplot = df.boxplot(column='cov_mc', by=pred_length_col, showmeans=True)  # Set showmeans to True
+    boxplot = sns.boxplot(x=pred_length_col, y='cov_mc', data=df, showmeans=True)
 
     # Calculate correlation coefficient
-    correlation_coefficient = df[pred_length_col].corr(df['cov_mc'])
+    spearman_corr, p_value = spearmanr(df[pred_length_col], df['cov_mc'])
 
     # Add labels and title
     plt.xlabel('Prediction Set Length')
     plt.ylabel('Coefficient of Variation (%)')
-    plt.title('')
-    plt.suptitle("")  # Remove the automatically generated title
+    # plt.title(f'{title} (Spearman Correlation: {spearman_corr:.2f})')
 
-    # Add correlation coefficient as text box
-    plt.text(0.95, 0.95, f'Correlation Coefficient: {correlation_coefficient:.2f}', 
-             horizontalalignment='right', 
-             verticalalignment='top', 
-             transform=plt.gca().transAxes, 
-             bbox=dict(facecolor='white', alpha=0.5))
+    # Add correlation coefficient and p-value as a text box
+    plt.text(0.95, 0.95, f'Spearman: {spearman_corr:.2f}\nP-value: {p_value:.3f}', 
+            horizontalalignment='right', 
+            verticalalignment='top', 
+            transform=plt.gca().transAxes, 
+            bbox=dict(facecolor='white', alpha=0.5))
 
     # Save plot
     save_path = os.path.join(save_dir, title + '_boxplot.png')
@@ -140,10 +139,9 @@ def create_plot_cov_vs_pred_set_size(df, mc_or_eval, title, save_dir):
 
 
 def create_plot_std_dev_vs_pred_set_size(df, mc_or_eval, title, save_dir):
-
     """
-    Create a box plot showing the standard deviation versus prediction set length.
- 
+    Create a box plot showing the coefficient of variation versus prediction set length.
+
     Parameters:
     - df: DataFrame containing the data.
     - mc_or_eval: String indicating whether to use 'mc' or 'eval' prediction set lengths.
@@ -153,37 +151,25 @@ def create_plot_std_dev_vs_pred_set_size(df, mc_or_eval, title, save_dir):
     Returns:
     - None: The function saves the resulting plot as a PNG file.
     """
-
-    if mc_or_eval == 'eval':
-        pred_length_col = 'pred_set_eval_length'
-    else:
-        pred_length_col = 'pred_set_mc_length'
+    pred_length_col = 'pred_set_eval_length' if mc_or_eval == 'eval' else 'pred_set_mc_length'
 
     # Create the box plot
-    boxplot = df.boxplot(column='std_avg_soft_mc_pred', by=pred_length_col, showmeans=True)  # Set showmeans to False
+    boxplot = sns.boxplot(x=pred_length_col, y='std_avg_soft_mc_pred', data=df, showmeans=True)
 
     # Calculate correlation coefficient
-    correlation_coefficient = df[pred_length_col].corr(df['std_avg_soft_mc_pred'])
+    spearman_corr, p_value = spearmanr(df[pred_length_col], df['std_avg_soft_mc_pred'])
 
     # Add labels and title
     plt.xlabel('Prediction Set Length')
     plt.ylabel('Standard Deviation')
-    # plt.title(f'{title} (Correlation Coefficient: {correlation_coefficient:.2f})')
+    # plt.title(f'{title} (Spearman Correlation: {spearman_corr:.2f})')
 
-    # Remove automatically generated title
-    plt.suptitle("")  # Set an empty string for the main title
-    
-    # Add correlation coefficient as text box
-    plt.text(0.95, 0.95, f'Correlation Coefficient: {correlation_coefficient:.2f}', 
-             horizontalalignment='right', 
-             verticalalignment='top', 
-             transform=plt.gca().transAxes, 
-             bbox=dict(facecolor='white', alpha=0.5))
-
-    # Save plot
-    save_path = os.path.join(save_dir, title + '_boxplot.png')
-    plt.savefig(save_path)
-    plt.close()  # Close the plot to release memory
+    # Add correlation coefficient and p-value as a text box
+    plt.text(0.95, 0.95, f'Spearman: {spearman_corr:.2f}\nP-value: {p_value:.3f}', 
+            horizontalalignment='right', 
+            verticalalignment='top', 
+            transform=plt.gca().transAxes, 
+            bbox=dict(facecolor='white', alpha=0.5))
 
     # Save plot
     save_path = os.path.join(save_dir, title + '_boxplot.png')
@@ -381,7 +367,8 @@ def histogram_of_std_dev_color_coded_by_set_length(df, std_dev_col, pred_set_len
     set_lengths = df[pred_set_length_col]
 
     # Dictionary to map pred_length to colors
-    color_map = {1: 'r', 2: 'g', 3: 'b'}
+    color_map = {0: 'y', 1: 'r', 2: 'g', 3: 'b'}
+
 
     for pred_length, group_df in df.groupby(pred_set_length_col):
         plt.hist(group_df[std_dev_col], bins=5, alpha=0.5, label=f'Conformal Pred Length = {pred_length}', color=color_map[pred_length])
@@ -416,7 +403,7 @@ def histogram_of_cov_color_coded_by_set_length(df, cov_col, pred_set_length_col,
     set_lengths = df[pred_set_length_col]
 
     # Dictionary to map pred_length to colors
-    color_map = {1: 'r', 2: 'g', 3: 'b'}
+    color_map = {0: 'y', 1: 'r', 2: 'g', 3: 'b'}
 
     for pred_length, group_df in df.groupby(pred_set_length_col):
         plt.hist(group_df[cov_col], bins=5, alpha=0.5, label=f'Conformal Pred Length = {pred_length}', color=color_map[pred_length])
@@ -432,7 +419,6 @@ def histogram_of_cov_color_coded_by_set_length(df, cov_col, pred_set_length_col,
     plt.close()  # Close the plot to release memory
 
 def distribution_of_std_dev_color_coded_by_set_length(df, std_dev_col, pred_set_length_col, save_dir, title):
-
     """
     Create a KDE plot of standard deviations, color-coded by prediction set length.
 
@@ -446,20 +432,17 @@ def distribution_of_std_dev_color_coded_by_set_length(df, std_dev_col, pred_set_
     Returns:
     - None: The function saves the resulting plot as a PNG file.
     """
-
-    std_devs = df[std_dev_col]
-    set_lengths = df[pred_set_length_col]
-
-    # Dictionary to map pred_length to colors
-    color_map = {1: 'r', 2: 'g', 3: 'b'}
+    unique_lengths = df[pred_set_length_col].unique()
+    colors = plt.cm.get_cmap('tab10').colors[:len(unique_lengths)]
+    color_dict = {length: colors[i] for i, length in enumerate(unique_lengths)}
 
     # Plot KDE plot for each prediction set length
     for pred_length, group_df in df.groupby(pred_set_length_col):
-        sns.kdeplot(data=group_df[std_dev_col], color=color_map[pred_length], label=f'Conformal Pred Length = {pred_length}', fill=False)
+        sns.kdeplot(data=group_df[std_dev_col], color=color_dict[pred_length], label=f'Conformal Pred Length = {pred_length}', fill=True)
 
     plt.xlabel('Standard Deviation')
     plt.ylabel('Density')
-    # plt.title('Distribution of Standard Deviation')
+    plt.title(title)
     plt.legend()
 
     # Save plot
@@ -468,7 +451,6 @@ def distribution_of_std_dev_color_coded_by_set_length(df, std_dev_col, pred_set_
     plt.close()  # Close the plot to release memory
 
 def distribution_of_cov_color_coded_by_set_length(df, cov_col, pred_set_length_col, save_dir, title):
-
     """
     Create a KDE plot of coefficient of variation (CoV), color-coded by prediction set length.
 
@@ -482,20 +464,17 @@ def distribution_of_cov_color_coded_by_set_length(df, cov_col, pred_set_length_c
     Returns:
     - None: The function saves the resulting plot as a PNG file.
     """
-
-    std_devs = df[cov_col]
-    set_lengths = df[pred_set_length_col]
-
-    # Dictionary to map pred_length to colors
-    color_map = {1: 'r', 2: 'g', 3: 'b'}
+    unique_lengths = df[pred_set_length_col].unique()
+    colors = plt.cm.get_cmap('tab10').colors[:len(unique_lengths)]
+    color_dict = {length: colors[i] for i, length in enumerate(unique_lengths)}
 
     # Plot KDE plot for each prediction set length
     for pred_length, group_df in df.groupby(pred_set_length_col):
-        sns.kdeplot(data=group_df[cov_col], color=color_map[pred_length], label=f'Conformal Pred Length = {pred_length}', fill=False)
+        sns.kdeplot(data=group_df[cov_col], color=color_dict[pred_length], label=f'Conformal Pred Length = {pred_length}', fill=True)
 
-    plt.xlabel('Coefficient of Variance (%)')
+    plt.xlabel('Coefficient of Variation (%)')
     plt.ylabel('Density')
-    # plt.title('Distribution of Coefficient of Variation')
+    # plt.title(title)
     plt.legend()
 
     # Save plot
